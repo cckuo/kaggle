@@ -39,7 +39,7 @@ def eval(sess, eval, data_size, images, labels, image_batch, label_batch):
     )
     log(msg, logfile)
 
-def make_batches(label_file, batch_size, num_epochs): 
+def make_batches(label_file, batch_size, num_epochs):
     images, labels = read_labeled_image_list(label_file)
 
     input_queue = tf.train.slice_input_producer(
@@ -143,8 +143,8 @@ sess = tf.Session()
 logits = vgg.fc8
 labels = tf.to_int64(labels_)
 cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(
-    logits,
-    labels,
+    logits=logits,
+    labels=labels,
     name='xentropy'
 )
 
@@ -204,7 +204,7 @@ for step in xrange(config.max_steps):
             duration
         )
         log(msg, logfile)
-        
+
         duration = 0.0
         cumulative_loss = 0.0
 
@@ -218,9 +218,9 @@ for step in xrange(config.max_steps):
         eval(
             sess,
             eval_comparison,
-            train_batch_size, 
+            train_batch_size,
             images_,
-            labels_, 
+            labels_,
             train_image_batch,
             train_label_batch
         )
@@ -230,13 +230,13 @@ for step in xrange(config.max_steps):
         eval(
             sess,
             eval_comparison,
-            test_batch_size, 
+            test_batch_size,
             images_,
-            labels_, 
+            labels_,
             test_image_batch,
             test_label_batch
         )
-        
+
         # Save the checkpoint file
         vgg.save_npy(sess, './trained_models/myVGG.%s.step.%d.npy' % (
             paramString, step))
@@ -246,5 +246,3 @@ for step in xrange(config.max_steps):
 
 # vgg.save_npy() save the model
 vgg.save_npy(sess, './trained_models/myVGG.%s.npy' % (paramString))
-
-
